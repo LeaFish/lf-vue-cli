@@ -1,0 +1,186 @@
+//毛玻璃效果
+.filter(@val:5px){
+  filter:blur(@val);
+  -webkit-filter:blur(@val);
+  -moz-filter:blur(@val);
+  -ms-filter:blur(@val);
+  -o-filter:blur(@val);
+}
+
+//文本可选择性
+.user-select(@val: auto){
+  -webkit-user-select: @val;  /* Chrome all / Safari all /opera15+*/
+  -moz-user-select: @val;     /* Firefox all */
+  -ms-user-select: @val;      /* IE 10+ */
+  user-select: @val;
+}
+//悬停小手
+.pointer(){
+  cursor: pointer;
+}
+//禁止光标
+.not-allowed(){
+  cursor: not-allowed;
+}
+//等待光标
+.wait(){
+  cursor: wait;
+}
+//帮助光标
+.help(){
+  cursor: help;
+}
+
+//transform
+.transform(@value){
+  -webkit-transform: @value;
+  -moz-transform: @value;
+  -ms-transform: @value;
+  -o-transform: @value;
+  transform: @value;
+}
+.transition(@value){
+  -webkit-transition: @value;
+  -moz-transition: @value;
+  -ms-transition: @value;
+  -o-transition: @value;
+  transition: @value;
+}
+
+//左浮动,右浮动
+.f-left(){
+  float: left;
+}
+.f-right(){
+  float: right;
+}
+
+//宽高
+.wh(@width,@height){
+  width: @width;
+  height: @height;
+}
+//宽高相同时
+.wh-c(@width){
+  width: @width;
+  height: @width;
+}
+
+//换行
+.break-word(){
+  word-wrap:break-word;
+  word-break:normal;
+  text-align: justify;
+}
+
+//圆角
+.radius(@value: 3px){
+  border-radius: @value;
+}
+.radius-4(@t-r,@b-r,@b-l,@t-l){
+  border-top-left-radius: @t-l;
+  border-top-right-radius: @t-r;
+  border-bottom-left-radius: @b-l;
+  border-bottom-right-radius: @b-r;
+}
+
+//边
+.border(@color,@radius){
+  border: 1px solid @color;
+  .radius(@radius)
+}
+
+//满屏
+.full-screen(){
+  position: fixed;
+  top: 0;right: 0;
+  bottom: 0;left: 0;
+}
+
+//超出省略
+.ellipsis(@clamp:1){
+  //display:block;
+  //white-space:nowrap;
+  //overflow:hidden;
+  //text-overflow:ellipsis;
+
+  word-break: break-all;
+  text-overflow: ellipsis;
+  display: -webkit-box; /** 对象作为伸缩盒子模型显示 **/
+  -webkit-box-orient: vertical; /** 设置或检索伸缩盒对象的子元素的排列方式 **/
+  -webkit-line-clamp: @clamp; /** 显示的行数 **/
+  overflow: hidden;
+  text-align: inherit!important;
+}
+
+//清除浮动
+.clear:before,
+.clear:after{
+  display: table;
+  content: " ";
+}
+.clear:after{
+  clear: both;
+}
+
+//背景
+.bg-c(@value){
+  background-color: @value;
+}
+.bg-s(@value){
+  background-size: @value;
+}
+.bg-n-c(@value){
+  .bg(url(@value) no-repeat center center);
+}
+.bg(@value){
+  background: @value;
+}
+
+.flex-center(){
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.placeholder(@color,@font){
+  ::-webkit-input-placeholder { /* WebKit browsers */
+    color: @color;
+    font: @font;
+  }
+  :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color: @color;
+    font: @font;
+  }
+  ::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color: @color;
+    font: @font;
+  }
+  :-ms-input-placeholder { /* Internet Explorer 10+ */
+    color: @color;
+    font: @font;
+  }
+}
+
+//无限旋转
+.infinite-rotate(@interval:2s){
+  animation: infinite-rotate @interval linear infinite;
+
+  @keyframes infinite-rotate {
+    0% {
+      transform: rotate(0deg);
+    }
+    25% {
+      transform: rotate(90deg);
+    }
+    50% {
+      transform: rotate(180deg);
+    }
+    75% {
+      transform: rotate(270deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+}
