@@ -114,13 +114,15 @@
 }
 
 //清除浮动
-.clear:before,
-.clear:after{
-  display: table;
-  content: " ";
-}
-.clear:after{
-  clear: both;
+.clear(){
+  &:before,
+  &:after{
+    display: table;
+    content: " ";
+  }
+  &:after{
+    clear: both;
+  }
 }
 
 //背景
