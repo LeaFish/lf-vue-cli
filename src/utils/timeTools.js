@@ -2,7 +2,7 @@
  * timeTools时间日期处理工具
  */
 
-//(function (main) {
+(function (main) {
   'use strict';
 
   /**
@@ -237,9 +237,6 @@
    * @returns {boolean}
      */
   timeTools.isDateObject = function(dateObj){
-    if(typeof dateObj === 'string' && isNaN(parseInt(dateObj))){
-      throw new Error('Invalid Date in isDateObject');
-    }
     return Object.prototype.toString.call(dateObj) !== '[object Date]' || isNaN(dateObj.getTime());
   };
 
@@ -254,9 +251,8 @@
   timeTools.format = function (dateObj, mask, i18nSettings) {
     var i18n = i18nSettings || timeTools.i18n;
 
-    if (typeof dateObj === 'number' || typeof dateObj === 'string' ) {
-      dateObj = String(dateObj).length == 10?Number(dateObj)*1000:dateObj;
-      dateObj = new Date(parseInt(dateObj));
+    if (typeof dateObj === 'number') {
+      dateObj = new Date(dateObj);
     }
 
     if (timeTools.isDateObject(dateObj)) {
@@ -426,25 +422,27 @@
       var result = pad(secondObject[$0.substr(0,1)],$0.length);
       result = showZero?result:parseInt(result) === 0?0:result;
       literals.push({$0,offset,source,result});
+      if(showZero && parseInt(result) < 10)result = '0' + result;
       return result;
     });
-    if(!showZero){
-      //重组字符串,处理零值
-      result = '';
-      for(var i = 0; i < literals.length ; i++){
-        var str = null;
-        if(i == literals.length - 1){
-          str = literals[i].source.substr(literals[i].offset);
-        }else{
-          str = literals[i].source.substr(literals[i].offset)
-              .replace(new RegExp(literals[i].source.substr(literals[i + 1].offset)),'');
-        }
-        literals[i].suffix = str.replace(new RegExp(literals[i].$0),'');
-        if(literals[i].result){
-          result += (literals[i].result + literals[i].suffix);
-        }
-      }
-    }
+    //console.log(result);
+    //if(!showZero){
+    //  //重组字符串,处理零值
+    //  result = '';
+    //  for(var i = 0; i < literals.length ; i++){
+    //    var str = null;
+    //    if(i == literals.length - 1){
+    //      str = literals[i].source.substr(literals[i].offset);
+    //    }else{
+    //      str = literals[i].source.substr(literals[i].offset)
+    //          .replace(new RegExp(literals[i].source.substr(literals[i + 1].offset)),'');
+    //    }
+    //    literals[i].suffix = str.replace(new RegExp(literals[i].$0),'');
+    //    if(literals[i].result){
+    //      result += (literals[i].result + literals[i].suffix);
+    //    }
+    //  }
+    //}
     return result;
   };
 
@@ -495,7 +493,7 @@
   timeTools.checkDate = function(date,addDateCount,mask = 'yyyy-MM-dd',key = 'getDate'){
     return timeTools.format(date,mask) == timeTools[key](addDateCount,mask);
   };
-
+  
   /***
    * Format all date string
    * @param {Date|number} date
@@ -516,10 +514,7 @@
    * @returns {string|XML}
      */
   timeTools.formatAllDate = function(date = new Date(),newMasks = {},sort){
-    if (typeof date === 'number' || typeof date === 'string' ) {
-      date = String(date).length == 10?Number(date)*1000:date;
-      date = new Date(parseInt(date));
-    }
+    if (typeof date === 'number') date = new Date(date);
     if (timeTools.isDateObject(date)) throw new Error('Invalid Date in timeTools.checkDate');
 
     //默认日期格式集,以及判断逻辑
@@ -606,10 +601,8 @@
   } else if(typeof main !== 'undefined'){
     main.timeTools = timeTools;
   }else{
-    //return timeTools;
+    return timeTools;
   }
-
-  export default timeTools;
-//})(this);
+})(this);
 
 
