@@ -5,7 +5,9 @@
 const regs = {
   'tel': /^1[3|4|5|7|8]\d{9}$/,
   'pwd': /^[0-9a-zA-Z]+$/,    //只允许使用阿拉伯数字和英文字母
-  'email': /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/
+  'email': /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/,
+  'SMS': /^\d{4,8}$/,    //验证码
+  'emoji': /\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDE4F]/g,
 };
 
 
@@ -102,3 +104,24 @@ export function faceFilter(str,bool){
     return str;
   }
 }
+
+/***
+ * 加密字符串中的emoji表情
+ * @param str
+ */
+export const faceEncodeURI = str => str.replace(/\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDE4F]|\%/g, function($0){
+  return encodeURI($0);
+});
+
+/***
+ * 解密字符串中的emoji表情
+ * @param str
+ * @returns {*}
+ */
+export const faceDecodeURI = str => {
+  let result = str;
+  try {
+    result = decodeURI(str);
+  }catch (err){}
+  return result;
+};

@@ -97,6 +97,12 @@
   bottom: 0;left: 0;
 }
 
+.full-box(){
+  position: absolute;
+  top: 0;right: 0;
+  bottom: 0;left: 0;
+}
+
 //超出省略
 .ellipsis(@clamp:1){
   //display:block;
@@ -145,6 +151,12 @@
   align-items: center;
 }
 
+.flex-between-center(){
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .placeholder(@color,@font){
   ::-webkit-input-placeholder { /* WebKit browsers */
     color: @color;
@@ -184,5 +196,13 @@
     100% {
       transform: rotate(360deg);
     }
+  }
+}
+
+.click-active(@color: #fff){
+  .pointer;
+  background: @color;
+  &:active{
+    background: @color - 20;
   }
 }

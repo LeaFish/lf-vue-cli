@@ -19,10 +19,10 @@ import Extend from '@/extend';
 //import 'emoji/lib/emoji.css';
 
 //pc ui
-import ElementUI from 'element-ui';
+//import ElementUI from 'element-ui';
 //import 'element-ui/lib/theme-default/index.css';
-import './styles/element-#2697f7/index.css';
-Vue.use(ElementUI);
+//import './styles/element-#2697f7/index.css';
+//Vue.use(ElementUI);
 
 //mobile ui
 import Mint from 'mint-ui';
@@ -46,4 +46,4 @@ new Vue({
 });
 
 //启用global全局变量
-addGlobal(store);
+//addGlobal(store);

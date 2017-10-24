@@ -9,13 +9,12 @@ import ckey from './ckey';
 import image from './image';
 
 
-const Config = {
-  base,
+const Config = Object.assign({},base,{
   api,
   scheme,
   ckey,
   image
-};
+});
 
 const install = function(Vue, opts = {}) {
   Vue.prototype.$config = Config;

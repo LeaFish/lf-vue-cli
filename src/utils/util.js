@@ -260,5 +260,40 @@ export const bw = (function(){
 })();
 
 
+/***
+ * 延迟执行
+ * @param timeout
+ * @returns {Promise}
+ */
+export const sleep = (timeout = 1500) => {
+  return new Promise((resolve,reject) => {
+    setTimeout(() => resolve(),timeout);
+  })
+};
 
+/***
+ * 拼接链接
+ * @param params
+ * @param path
+ * @param hash
+ * @param domain
+ * @returns {string}
+ */
+export const formatUrl = ({params = {},path = '',hash = '',domain = ''}) => {
+  let search = [];
+  for(let i in params){search.push(i + '=' + params[i])}
+  return (domain == ''?'':domain) + path + (search.length > 0?('?' + search.join('&')):'') + (hash == ''?'':('#' + hash))
+};
 
+/***
+ * 生成星级rate数组
+ * @param num
+ * @param limit
+ * @returns {Array}
+ */
+export const getRateArray = (num = 5,limit = 5) =>{
+  const number = isNaN(parseFloat(num))?5:parseFloat(num);
+  let arr = [];
+  for(let i = 1;i <= limit;i++)arr.push(i <= number);
+  return arr;
+};
