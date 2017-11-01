@@ -12,6 +12,7 @@ export class wxPay{
       success: () => {},          //支付成功回调
       cancel: () => {},           //支付取消回调
       fail: () => {},             //支付失败回调
+      complete: () => {},
       toast: text => console.log(text),
       data: null,             //传给微信的数据
     },params);
@@ -36,6 +37,7 @@ export class wxPay{
       'getBrandWCPayRequest',
       this.data,
       res => {
+        this.complete();
         switch (res.err_msg) {
           case 'get_brand_wcpay_request:ok' : this.toast('支付成功');this.success();break;
           case 'get_brand_wcpay_request:cancel': this.toast('已取消支付');this.cancel();break;
