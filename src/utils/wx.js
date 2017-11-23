@@ -59,6 +59,8 @@ export class wxShare{
       link  : null,                      // 分享链接
       imgUrl: null,                      // 分享图标
       desc  : null,                      // 分享描述
+      dataUrl: '',                        // 如果type是music或video，则要提供数据链接，默认为空
+      type: '',                           // 分享类型,music、video或link，不填默认为link
       config : null,                     // 分享配置
       ready: false,                      // 是否为页面加载完成即启动
       toast: text => console.log(text),
@@ -90,8 +92,8 @@ export class wxShare{
       desc: this.desc,
       link: this.link,
       imgUrl: this.imgUrl,
-      type: '',       // 分享类型,music、video或link，不填默认为link
-      dataUrl: '',    // 如果type是music或video，则要提供数据链接，默认为空
+      type: this.type,       // 分享类型,music、video或link，不填默认为link
+      dataUrl: this.dataUrl,    // 如果type是music或video，则要提供数据链接，默认为空
       success: this.success,
       cancel: this.cancel
     });
