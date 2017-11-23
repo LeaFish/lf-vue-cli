@@ -71,7 +71,7 @@ export class wxShare{
 
   init(){
     wx.config(this.config);
-    this.ready?wx.ready(this.share):this.share();
+    wx.ready(this.share.bind(this));
   }
 
   share(){
