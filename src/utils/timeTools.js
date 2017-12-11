@@ -1,7 +1,7 @@
 /***
  * timeTools时间日期处理工具
  */
-
+var timeTools = {};
 (function (main) {
   'use strict';
 
@@ -9,7 +9,7 @@
    * Parse or format dates
    * @class timeTools
    */
-  var timeTools = {};
+
   var token = /D{1,4}|M{1,4}|yy(?:yy)?|S{1,3}|do|ZZ|([HhMsdm])\1?|[aA]|"[^"]*"|'[^']*'/g;
   var twoDigits = /\d\d?/;
   var threeDigits = /\d{3}/;
@@ -50,6 +50,8 @@
     }
     return val;
   }
+
+  timeTools.pad = pad;
 
   var dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   var monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -255,7 +257,9 @@
       dateObj = new Date(dateObj);
     }
 
+
     if (timeTools.isDateObject(dateObj)) {
+      console.error('Invalid Date in timeTools.format');
       throw new Error('Invalid Date in timeTools.format');
     }
 
@@ -291,6 +295,7 @@
     var i18n = i18nSettings || timeTools.i18n;
 
     if (typeof format !== 'string') {
+      console.error('Invalid format in timeTools.parse');
       throw new Error('Invalid format in timeTools.parse');
     }
 
@@ -351,11 +356,15 @@
    * @param s       秒
    * @param type    转换上限类型
    * @param simple  是否简化返回值的key
+   * @param pad     是否补0
    * @returns {{}}
      */
-  timeTools.secondToObject = function(s = 0,type = 'd',simple = false){
+  timeTools.secondToObject = function(s = 0,type = 'd',simple = false,pad = false){
     var second = parseInt(s),minute = 0,hour = 0,day = 0,obj = {};
-    if(typeof second !== 'number')throw new Error('argument[1] must is a number in timeTools.secondToObject');
+    if(typeof second !== 'number'){
+      console.error('argument[1] must is a number in timeTools.secondToObject');
+      throw new Error('argument[1] must is a number in timeTools.secondToObject');
+    }
     if(s > 0){
       if(type == 'd'){
         day = Math.floor(second/60/60/24);
@@ -384,11 +393,17 @@
 
     var newObj = {};
     if(simple){
-      for(var index in obj){
+      for(let index in obj){
         newObj[index.substr(0,1)] = obj[index];
       }
     }else{
       newObj = obj;
+    }
+
+    if(pad){
+      for(let index in newObj){
+        newObj[index] = timeTools.pad(newObj[index],pad);
+      }
     }
 
     return newObj;
@@ -413,7 +428,10 @@
         break;
       }
     }
-    if(type == null)throw new Error('Invalid mask in timeTools.secondFormat');
+    if(type == null){
+      console.error('Invalid mask in timeTools.secondFormat');
+      throw new Error('Invalid mask in timeTools.secondFormat');
+    }
     // 验证结果寄存器
     var literals = [];
     var secondObject = timeTools.secondToObject(s,type,true);  //获取通过格式上限转换出来的时间对象
@@ -515,7 +533,10 @@
      */
   timeTools.formatAllDate = function(date = new Date(),newMasks = {},sort){
     if (typeof date === 'number') date = new Date(date);
-    if (timeTools.isDateObject(date)) throw new Error('Invalid Date in timeTools.checkDate');
+    if (timeTools.isDateObject(date)) {
+      console.error('Invalid Date in timeTools.checkDate');
+      throw new Error('Invalid Date in timeTools.checkDate');
+    }
 
     //默认日期格式集,以及判断逻辑
     var masks = {
@@ -556,6 +577,7 @@
         }
       }
     }else{
+      console.error('Invalid newMasks in timeTools.checkDate');
       throw new Error('Invalid newMasks in timeTools.checkDate');
     }
 
