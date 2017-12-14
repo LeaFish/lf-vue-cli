@@ -354,18 +354,35 @@ var timeTools = {};
   /***
    * Make a second to a object
    * @param s       秒
-   * @param type    转换上限类型
+   * @param type    转换上限类型  y M d h m s
    * @param simple  是否简化返回值的key
    * @param pad     是否补0
    * @returns {{}}
      */
   timeTools.secondToObject = function(s = 0,type = 'd',simple = false,pad = false){
-    var second = parseInt(s),minute = 0,hour = 0,day = 0,obj = {};
+    var second = parseInt(s),minute = 0,hour = 0,day = 0,month = 0,year = 0,obj = {};
     if(typeof second !== 'number'){
       console.error('argument[1] must is a number in timeTools.secondToObject');
       throw new Error('argument[1] must is a number in timeTools.secondToObject');
     }
     if(s > 0){
+      if(type == 'y'){
+        year = Math.floor(second/60/60/24/30/365);
+        month = Math.floor((second - year*60*60*24*30*365)/60/60/24/30);
+        day = Math.floor((second - year*60*60*24*30*365 - month*30*60*60*24)/60/60/24);
+        hour = Math.floor((second - year*60*60*24*30*365 - month*30*60*60*24 - day*60*60*24)/3600);
+        minute = Math.floor((second - year*60*60*24*30*365 - month*30*60*60*24 - day*60*60*24 - hour*3600)/60);
+        second = Math.floor(second - year*60*60*24*30*365 - month*30*60*60*24 - day*60*60*24 - hour*3600 - minute*60);
+        obj = { year, month, day, hour, minute, second };
+      }
+      if(type == 'M'){
+        month = Math.floor(second/60/60/24/30);
+        day = Math.floor((second - month*30*60*60*24)/60/60/24);
+        hour = Math.floor((second - month*30*60*60*24 - day*60*60*24)/3600);
+        minute = Math.floor((second - month*30*60*60*24 - day*60*60*24 - hour*3600)/60);
+        second = Math.floor(second - month*30*60*60*24 - day*60*60*24 - hour*3600 - minute*60);
+        obj = { month, day, hour, minute, second };
+      }
       if(type == 'd'){
         day = Math.floor(second/60/60/24);
         hour = Math.floor((second - day*60*60*24)/3600);
@@ -388,13 +405,17 @@ var timeTools = {};
         obj = {second}
       }
     }else{
-      obj = { day: 0, hour: 0, minute: 0, second: 0 };
+      obj = { year: 0, month: 0, day: 0, hour: 0, minute: 0, second: 0 };
     }
 
     var newObj = {};
     if(simple){
       for(let index in obj){
-        newObj[index.substr(0,1)] = obj[index];
+        if(index == 'month'){
+          newObj['M'] = obj[index];
+        }else{
+          newObj[index.substr(0,1)] = obj[index];
+        }
       }
     }else{
       newObj = obj;
@@ -413,14 +434,14 @@ var timeTools = {};
     /***
      * Format a second
      * @param s         为秒为单位的数字
-     * @param mask      自定义格式  可匹配字符 'd','h','m','s'
+     * @param mask      自定义格式  可匹配字符 'y','M','d','h','m','s'
      * @param showZero  是否显示零值
      * @returns {string}
      */
   timeTools.secondFormat = function(s,mask = 'd天h小时m分钟s秒',showZero = false){
-    var reg = /d+|h+|m+|s+/g;
+    var reg = /y+|M+|d+|h+|m+|s+/g;
     var type = null;
-    var typeArr = ['d','h','m','s'];  //定义可匹配字符
+    var typeArr = ['y','M','d','h','m','s'];  //定义可匹配字符
     for(var i = 0; i < typeArr.length ; i++){
       var item = typeArr[i];
       if(new RegExp(item).test(mask)){  //自动检测自定义格式的上限
@@ -611,6 +632,39 @@ var timeTools = {};
         }
       }
     }
+  };
+
+
+  /***
+   * 判断当前距离一个时间点的距离
+   * @param date    时间对象
+   * @param start   数据起点  'y','M','d','h','m','s'
+   * @param end     数据终点  'y','M','d','h','m','s'
+   * @param returnObject  直接返回处理后的秒对象
+   * @returns {*}
+   */
+  timeTools.getNowDistance = function(date = new Date(),start = 'y',end = 'm',returnObject = false){
+    let dis = parseInt((date.getTime() - new Date().getTime())/1000);  //秒级差值
+    let state = dis < 0 ?0:dis == 0?1:2; //past now future
+    let stateArray = ['前','刚刚','后'];
+    let text = {y: '年', M: '个月', d: '天', h: '小时', m: '分钟', s: '秒'};
+    let sort = ['y','M','d','h','m','s'];
+    let result = null;
+
+    let secondObject = timeTools.secondToObject(Math.abs(dis),start,true);
+
+    if(returnObject)return secondObject;
+    if(state == 1)return stateArray[state];
+
+    for(let i = 0;i < sort.length;i++){
+      let item = sort[i];
+      if(secondObject[item] != 0){
+        result = end == item?stateArray[state]:(secondObject[item] + text[item] + stateArray[state]);
+        break;
+      }
+    }
+
+    return result;
   };
 
   /* istanbul ignore next */
