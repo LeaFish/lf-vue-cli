@@ -659,7 +659,7 @@ var timeTools = {};
     for(let i = 0;i < sort.length;i++){
       let item = sort[i];
       if(secondObject[item] != 0){
-        result = end == item?stateArray[state]:(secondObject[item] + text[item] + stateArray[state]);
+        result = end == item?stateArray[1]:(secondObject[item] + text[item] + stateArray[state]);
         break;
       }
     }
